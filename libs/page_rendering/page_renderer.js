@@ -112,12 +112,12 @@ page_renderer.prototype.render_file_by_filename_extend_context = function (filen
 
 }
 
-page_renderer.prototype.render_file_by_filename_replace_context = function (filename, context) {
+page_renderer.prototype.render_file_by_filename_replace_context = function (filename, context, culture) {
 	var self = this
 	context = context || {}
 
 	var file = get_template_by_filename(filename)
-	var culture = config.cultures[0]
+	culture = culture || config.cultures[0]
 
 	return self.render_file_by_context(file, context, culture)
 }

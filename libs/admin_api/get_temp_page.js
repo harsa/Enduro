@@ -35,6 +35,7 @@ api_call.prototype.call = function (req, res, enduro_server) {
 		var sid = jsonString.sid
 		var filename = jsonString.filename
 		var content = jsonString.content
+		var culture = jsonString.culture
 
 		// makes sure all required query parameters were sent
 		if (!sid || !filename || !content) {
@@ -44,7 +45,7 @@ api_call.prototype.call = function (req, res, enduro_server) {
 
 		admin_sessions.get_user_by_session(sid)
 			.then((user) => {
-				return temper.render(filename, content)
+				return temper.render(filename, content, culture)
 			}, () => {
 				res.sendStatus(401)
 				throw new Error('abort promise chain')
