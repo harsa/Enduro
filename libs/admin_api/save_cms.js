@@ -15,7 +15,7 @@ var admin_sessions = require(ENDURO_FOLDER + '/libs/admin_utilities/admin_sessio
 var juicebox = require(ENDURO_FOLDER + '/libs/juicebox/juicebox')
 var logger = require(ENDURO_FOLDER + '/libs/logger')
 var admin_rights = require(ENDURO_FOLDER + '/libs/admin_utilities/admin_rights')
-
+var request = require("request")
 // routed call
 api_call.prototype.call = function (req, res, enduro_server) {
 
@@ -41,6 +41,26 @@ api_call.prototype.call = function (req, res, enduro_server) {
 
 		var requesting_user
 
+		//#resq-web
+		var slackHook = "https://hooks.slack.com/services/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"
+
+		var sendSlack = function(text){
+			request.post(
+				slackHook,
+				{ json: {
+					"username": "cms bot",
+					"icon_emoji": ":ghost:",
+					"text": text
+					}
+				},
+				function (error, response, body) {
+					if (!error && response.statusCode == 200) {
+						console.log(body)
+					}
+				}
+			);
+		}
+
 		admin_sessions.get_user_by_session(sid)
 			.then((user) => {
 				if (!admin_rights.can_user_do_that(user, 'write')) {
@@ -60,6 +80,7 @@ api_call.prototype.call = function (req, res, enduro_server) {
 			.then((data) => {
 				// re-renders enduro - essential to publishing the change
 				enduro_server.enduro_refresh(() => {
+					sendSlack("Page " + filename + " saved by " +  requesting_user.username);
 					res.send(data)
 				})
 			}, () => {})
