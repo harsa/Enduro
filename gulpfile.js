@@ -140,7 +140,7 @@ gulp.task('sass', function () {
 			this.emit('end')
 		})
 		.pipe(autoprefixer({
-			browsers: ['last 2 versions'],
+			browsers: ['last 4 versions'],
 			cascade: false,
 		}))
 		.pipe(sourcemaps.write())
