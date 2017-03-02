@@ -203,6 +203,14 @@ gulp.task('iconfont', function (cb) {
 		.pipe(gulp.dest('_src/assets/iconfont/'))
 })
 
+var cleanCSS = require('gulp-clean-css');
+gulp.task('minify_css', function() {
+	return gulp.src(CMD_FOLDER + '/_src/assets/css/*.css')
+		.pipe(cleanCSS({compatibility: 'ie8', debug: true}, function(details){
+		}))
+		.pipe(gulp.dest(CMD_FOLDER + '/_src/assets/css/min'));
+});
+
 // * ———————————————————————————————————————————————————————— * //
 // * 	JS Handlebars - Not enduro, page-generation related
 // * ———————————————————————————————————————————————————————— * //
@@ -234,7 +242,7 @@ gulp.task('hbs_helpers', function () {
 // * 	Default Task
 // * ———————————————————————————————————————————————————————— * //
 // gulp.task('default', ['hbs_templates', 'sass', 'js', 'img', 'vendor', 'fonts', 'hbs_helpers', 'browser_sync'])
-gulp.task('default', ['hbs_templates', 'sass', assets_copier, 'hbs_helpers', 'browser_sync'])
+gulp.task('default', ['hbs_templates', 'sass', 'minify_css',assets_copier, 'hbs_helpers', 'browser_sync'])
 gulp.task('default_norefresh', ['hbs_templates', 'sass', assets_copier, 'hbs_helpers', 'browser_sync_norefresh'])
 
 // * ———————————————————————————————————————————————————————— * //
@@ -247,7 +255,7 @@ gulp.task('preproduction', ['iconfont', 'png_sprites', pagelist_generator])
 // * 	Production Task
 // *	No browser_sync, no watching for anything
 // * ———————————————————————————————————————————————————————— * //
-gulp.task('production', ['sass', 'hbs_templates', assets_copier, 'hbs_helpers'])
+gulp.task('production', ['sass', 'minify_css', 'hbs_templates', assets_copier, 'hbs_helpers'])
 
 
 // Export gulp to enable access for enduro
