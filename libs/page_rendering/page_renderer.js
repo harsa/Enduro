@@ -28,7 +28,7 @@ page_renderer.prototype.render_file = function (file, context_filename, culture,
 
 		flat_file_handler.load(context_filename)
 			.then((context) => {
-				return self.render_file_by_context(file, context, culture)
+				return self.render_file_by_context(file, context, culture, context_filename)
 			}, () => {
 				logger.err('something went wrong attempting to locate file: ' + file)
 				throw new Error('abort promise chain')
@@ -49,7 +49,7 @@ page_renderer.prototype.render_file = function (file, context_filename, culture,
 	})
 }
 
-page_renderer.prototype.render_file_by_context = function (file, context, culture) {
+page_renderer.prototype.render_file_by_context = function (file, context, culture, context_filename) {
 	return new Promise(function (resolve, reject) {
 	// Attempts to read the file
 		fs.readFile(file, 'utf8', function (err, raw_template) {
@@ -72,7 +72,7 @@ page_renderer.prototype.render_file_by_context = function (file, context, cultur
 			}
 
 			// Add pagename to the context
-			extend(true, context, {_meta: {pagename: pagename, culture: culture}})
+			extend(true, context, {_meta: {pagename: pagename, culture: culture, filename: context_filename}})
 
 			// adds in-cms networking
 			globalizer.globalize(context)

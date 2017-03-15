@@ -10,6 +10,7 @@ var links = {
 	'flat_file_handler': '/libs/flat_utilities/flat_file_handler',
 	'logger': '/libs/logger',
 	'enduro_helpers': '/libs/flat_utilities/enduro_helpers',
+	'babel_handler': '/libs/babel/babel.js'
 }
 
 for (link in links) {
